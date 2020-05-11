@@ -77,4 +77,45 @@ then
 	rm -f data/pubmed_processed.zip
 fi
 
+
+if [ ! -d "./models/pretrained_models" ]
+then
+	echo -e "${BOLD} MedType> Setting up directories ${DEFAULT}"
+	mkdir -p models/pretrained_models
+fi
+
+if [ ! -f "./models/pretrained_models/general_model.bin" ]
+then
+	# Pretrained model for General domain text
+	echo -e "${BOLD} MedType> Downloading pre-trained model for general articles: general_model.bin ${DEFAULT}"
+	gdown --id 1lFFvd7XT9P1ZA_s7NDjUSm2YBRmo2TzM -O models/pretrained_models/general_model.zip
+
+	echo -e "${BOLD} MedType> Extracting model ${DEFAULT}"
+	unzip models/pretrained_models/general_model.zip -d models/pretrained_models/
+	rm -f models/pretrained_models/general_model.zip
+fi
+
+if [ ! -f "./models/pretrained_models/pubmed_model.bin" ]
+then
+	# Pretrained model for Biomedical research articles
+	echo -e "${BOLD} MedType> Downloading pre-trained model for biomedical articles: pubmed_model.bin ${DEFAULT}"
+	gdown --id 19DrhHCpwOJX9aUBlDMDmyyQ3eSSdnEzO -O models/pretrained_models/pubmed_model.zip
+
+	echo -e "${BOLD} MedType> Extracting model ${DEFAULT}"
+	unzip models/pretrained_models/pubmed_model.zip -d models/pretrained_models/
+	rm -f models/pretrained_models/pubmed_model.zip
+fi
+
+
+if [ ! -f "./models/pretrained_models/ehr_model.bin" ]
+then
+	# Pretrained model for EHR documents
+	echo -e "${BOLD} MedType> Downloading pre-trained model for Electronic Health Records (EHRs): ehr_model.bin ${DEFAULT}"
+	gdown --id 1Ft-yeC7af3MtypjejPmvnqcy7xRQuWbp -O models/pretrained_models/ehr_model.zip
+
+	echo -e "${BOLD} MedType> Extracting model ${DEFAULT}"
+	unzip models/pretrained_models/ehr_model.zip -d models/pretrained_models/
+	rm -f models/pretrained_models/ehr_model.zip
+fi
+
 echo -e "${BOLD} MedType> All Set! ${DEFAULT}"
