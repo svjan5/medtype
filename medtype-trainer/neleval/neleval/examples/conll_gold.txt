@@ -1,0 +1,11 @@
+-DOCSTART- (doc1)
+The	B	The Cat
+Cat	I	The Cat
+sat
+on
+the
+mat
+in
+Paris	B	Paris	Paris
+.
+

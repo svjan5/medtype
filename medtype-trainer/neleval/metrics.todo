@@ -1,0 +1,27 @@
+b_cubed
+b_cubed_plus
+entity_ceaf		
+entity_match
+mention_ceaf
+mention_ceaf_plus
+muc
+pairwise
+
+strong_typed_all_match		Micro-averaged evaluation of all mentions. Mention is correct only if it has the same span, entity type and entity ID as the gold link.
+
+Mention Detection:
+strong_mention_match 		Only exact mention match is counted as correct
+strong_typed_mention_match	Exact mention match and type match
+strong_linked_mention_match	Same as strong_mention_match but only considers non-nil mentions that are linked to KB identifier.
+
+Linking Evaluation:
+strong_link_match 		System link must have the same span and KB identifier as a gold link to be counted as correct
+strong_nil_match 		A system nil must have the same span as a gold nil to be counted as correct.
+strong_all_match 		A mention is counted as correct if is either a link match or a nil match as defined above
+
+strong_typed_link_match		
+
+
+strong_typed_nil_match
+typed_mention_ceaf
+typed_mention_ceaf_plus

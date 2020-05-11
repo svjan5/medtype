@@ -1,0 +1,36 @@
+-DOCSTART- (doc1)
+The	B	The Cat
+Cat	I	The Cat
+sat
+on
+the
+mat
+in
+Paris	B	Paris	Paris	0.8
+France	B	France	France	0.8
+.
+
+Another
+item
+is
+in
+San	B	San Francisco
+Francisco	I	San Francisco
+.
+
+-DOCSTART- (docb)
+The	B	The Cat
+Cat	I	The Cat
+sat
+on
+the
+mat
+in
+Paris	B	Paris	Paris	0.8
+.
+Some
+non
+split
+sentence
+.
+
