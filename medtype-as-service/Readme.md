@@ -105,9 +105,9 @@
 
       ```xml
       <delegateAnalysisEngine key="DictionaryLookupAnnotatorDB"> 
-      		<!--import location="../../../ctakes-dictionary-lookup/desc/analysis_engine/DictionaryLookupAnnotatorUMLS.xml" /--> 
-      		<import location="../../../ctakes-dictionary-lookup-fast/desc/analysis_engine/UmlsLookupAnnotator.xml"/> 
-      	</delegateAnalysisEngine>
+      	<!--import location="../../../ctakes-dictionary-lookup/desc/analysis_engine/DictionaryLookupAnnotatorUMLS.xml" /--> 
+      	<import location="../../../ctakes-dictionary-lookup-fast/desc/analysis_engine/UmlsLookupAnnotator.xml"/> 
+      </delegateAnalysisEngine>
       ```
 
    5. To start CTakes server, use : 
