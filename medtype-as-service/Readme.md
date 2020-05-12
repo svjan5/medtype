@@ -103,14 +103,14 @@
 
    4. Change DictionaryLookupAnnotatorDB to the following `(In file : dec/ctakes-clinical-pipeline/desc/analysis_engine/AggregatePlaintextUMLSProcessor.xml)`
 
-      ```
-	<delegateAnalysisEngine key="DictionaryLookupAnnotatorDB"> 
-		<!--import location="../../../ctakes-dictionary-lookup/desc/analysis_engine/DictionaryLookupAnnotatorUMLS.xml" /--> 
-		<import location="../../../ctakes-dictionary-lookup-fast/desc/analysis_engine/UmlsLookupAnnotator.xml"/> 
-	</delegateAnalysisEngine>
+      ```xml
+      <delegateAnalysisEngine key="DictionaryLookupAnnotatorDB"> 
+      		<!--import location="../../../ctakes-dictionary-lookup/desc/analysis_engine/DictionaryLookupAnnotatorUMLS.xml" /--> 
+      		<import location="../../../ctakes-dictionary-lookup-fast/desc/analysis_engine/UmlsLookupAnnotator.xml"/> 
+      	</delegateAnalysisEngine>
       ```
 
-   4. To start CTakes server, use : 
+   5. To start CTakes server, use : 
 
       ```shell
       java -Dctakes.umlsuser=<XXXX> \
@@ -122,7 +122,7 @@
 
       `localhost` and `9999` are ip and port of the ctakes-server. 
 
-   5. To check whether everything is proper installed query : 
+   6. To check whether everything is proper installed query : 
 
       ```shell
       curl "http://localhost:9999/ctakes?text=Pain in the left leg." 
