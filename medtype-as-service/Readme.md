@@ -49,14 +49,14 @@
       ./bin/skrmedpostctl start
       ./bin/wsdserverctl start
       
-      # For MeteMap
+      # For MeteMapLite
       cd public_mm_lite
       mv data/ivf/2018ABascii data/ivf/2018AB
       mkdir data/ivf/2018AB/USAbase/strict
       mv data/ivf/2018AB/USAbase/* data/ivf/2018AB/USAbase/strict
       ```
 
-   3. Finally, check whether everything is install perfectly by running the following:
+   3. Finally, check whether everything is installed perfectly by running the following:
 
       ```shell
       git clone https://github.com/AnthonyMRios/pymetamap
