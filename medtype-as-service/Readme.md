@@ -142,10 +142,10 @@ For staring server:
 
 ```shell
 medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model.bin \
-					  --type_remap_json $PWD/../config/type_remap.json \
-					  --type2id_json $PWD/../config/type2id.json \
-					  --umls2type_file $PWD/resources/umls2type.pkl \
-					  --entity_linker scispacy
+		      --type_remap_json $PWD/../config/type_remap.json \
+		      --type2id_json $PWD/../config/type2id.json \
+		      --umls2type_file $PWD/resources/umls2type.pkl \ 
+		      --entity_linker scispacy
 ```
 
 On client side:
