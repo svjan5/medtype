@@ -125,7 +125,7 @@ class Metamap(BaseLinker):
 
 			pos_info = [list(map(int, x.split('/'))) for x in concept.pos_info.replace(',', ';').replace('[', '').replace(']', '').split(';')]
 			men_cnt  = [len(x.split(',')) for x in concept.pos_info.split(';')]
-			men_sing = [re.match(r'.*"-.*-\d*-"(.*)"-.*', x).groups()[0] for x in concept.trigger.split(',"')]
+			men_sing = replace(concept.trigger, '"').split('"')[1::2][1::2]
 			mentions = mergeList([[men]*men_cnt[j] for j, men in enumerate(men_sing)])
 
 			for i, (start, offset) in enumerate(pos_info):				
@@ -151,7 +151,7 @@ class MetamapLite(BaseLinker):
 			if concept.mm !='MMI': continue
 
 			pos_info = [list(map(int, x.split('/'))) for x in concept.pos_info.split(';')]
-			mentions = [re.match(r'.*"-.*-\d*-"(.*)"-.*', x).groups()[0] for x in concept.trigger.split(',"')]
+			mentions = replace(concept.trigger, '"').split('"')[0::2][1::2]
 
 			for i, (start, offset) in enumerate(pos_info):
 				end = start + offset

@@ -131,7 +131,6 @@ def ctakes(doc_list):
 
 ######################### METAMAP
 
-
 def metamap(doc_list):
 	from pymetamap import MetaMap
 	mm = MetaMap.get_instance(args.metamap_path)
@@ -141,36 +140,35 @@ def metamap(doc_list):
 		data = []
 		for i, doc in enumerate(doc_list):
 
-			text = clean_text(doc['text'])
-			concepts, error  = mm.extract_concepts([text],[doc['_id']])
-			assert len(text) == len(doc['text']), 'Text length does not match after pre-processing'
+			try:
+				text = clean_text(doc['text'])
+				concepts, error  = mm.extract_concepts([text],[doc['_id']])
+				
+				assert len(text) == len(doc['text']), 'Text length does not match after pre-processing'
 
-			res_list = ddict(list)
-			for k, concept in enumerate(concepts):
-				if concept[1] !='MMI': continue
+				res_list = ddict(list)
+				for k, concept in enumerate(concepts):
+					if concept[1] !='MMI': continue
 
-				pos_info = [list(map(int, x.split('/'))) for x in concept.pos_info.replace(',', ';').replace('[', '').replace(']', '').split(';')]
-				men_cnt  = [len(x.split(',')) for x in concept.pos_info.split(';')]
-				men_sing = [re.match(r'.*"-.*-\d*-"(.*)"-.*', x).groups()[0] for x in concept.trigger.split(',"')]
-				mentions = mergeList([[men]*men_cnt[j] for j, men in enumerate(men_sing)])
+					pos_info = [list(map(int, x.split('/'))) for x in concept.pos_info.replace(',', ';').replace('[', '').replace(']', '').split(';')]
+					men_cnt  = [len(x.split(',')) for x in concept.pos_info.split(';')]
+					men_sing = replace(concept.trigger, '"').split('"')[1::2][1::2]
+					mentions = mergeList([[men]*men_cnt[j] for j, men in enumerate(men_sing)])
 
-				assert len(pos_info) == len(mentions), "Problem with regex"
+					for j, (start, offset) in enumerate(pos_info):						
+						end = start + offset
+						res_list[(start, end)].append((concept.cui, concept.score))
 
-				for i, (start, offset) in enumerate(pos_info):
-					try:
-						assert text[start-1: start-1+offset] in mentions[i], "Problem with Metamap tokenization"
-					except Exception as e:
-						print('\nException Cause: {}'.format(e.args[0]))
-						import pdb; pdb.set_trace()
-					
-					end = start + offset
-					res_list[(start, end)].append((concept.cui, concept.score))
+				doc['result'] = dict(res_list)
+				data.append(doc)
+				if i % 10 == 0: 
+					print('Completed [{}] {}, {}'.format(pid, i, time.strftime("%d_%m_%Y") + '_' + time.strftime("%H:%M:%S")))
+			except Exception as e:
+				print('\nException Cause: {}'.format(e.args[0]))
+				continue
+			
 
-			doc['result'] = dict(res_list)
-			data.append(doc)
-			if i % 10 == 0: 
-				print('Completed [{}] {}, {}'.format(pid, i, time.strftime("%d_%m_%Y") + '_' + time.strftime("%H:%M:%S")))
-
+		print('All work done {}!!'.format(pid))
 		return data
 
 	num_procs = args.workers
@@ -189,31 +187,35 @@ def metamaplite(doc_list):
 
 	def process_data(pid, doc_list):
 
-		data = []
+		data, miss = [], 0
 		for i, doc in enumerate(doc_list):
+			try:
+				text = clean_text(doc['text'])
+				concepts, error  = mm.extract_concepts([text],[doc['_id']])
+				assert len(text) == len(doc['text']), 'Text length does not match after pre-processing'
 
-			text = clean_text(doc['text'])
-			concepts, error  = mm.extract_concepts([text],[doc['_id']])
-			assert len(text) == len(doc['text']), 'Text length does not match after pre-processing'
+				res_list = ddict(list)
+				for k, concept in enumerate(concepts):
+					if concept.mm !='MMI': continue
 
-			res_list = ddict(list)
-			for k, concept in enumerate(concepts):
-				if concept.mm !='MMI': continue
+					pos_info = [list(map(int, x.split('/'))) for x in concept.pos_info.split(';')]
+					mentions = replace(concept.trigger, '"').split('"')[0::2][1::2]
 
-				pos_info = [list(map(int, x.split('/'))) for x in concept.pos_info.split(';')]
-				mentions = [re.match(r'.*"-.*-\d*-"(.*)"-.*', x).groups()[0] for x in concept.trigger.split(',"')]
-				assert len(pos_info) == len(mentions), "Problem with regex"
+					for j, (start, offset) in enumerate(pos_info):						
+						end = start + offset
+						res_list[(start, end)].append((concept.cui, concept.score))
 
-				for i, (start, offset) in enumerate(pos_info):
-					assert text[start-1: start-1+offset] == mentions[i], "Problem with Metamap tokenization"
-					end = start + offset
-					res_list[(start, end)].append((concept.cui, concept.score))
+				doc['result'] = dict(res_list)
+				data.append(doc)
+				if i % 10 == 0: 
+					print('Completed [{}] {}, {}'.format(pid, i, time.strftime("%d_%m_%Y") + '_' + time.strftime("%H:%M:%S")))
 
-			doc['result'] = dict(res_list)
-			data.append(doc)
-			if i % 10 == 0: 
-				print('Completed [{}] {}, {}'.format(pid, i, time.strftime("%d_%m_%Y") + '_' + time.strftime("%H:%M:%S")))
+			except Exception as e:
+				print('\nException Cause: {}'.format(e.args[0]))
+				miss += 1
+				continue
 
+		print('All work done {} | Miss: {}!!'.format(pid, miss))
 		return data
 
 	num_procs = args.workers
