@@ -111,7 +111,7 @@ if __name__ == '__main__':
 			logits	  = np.concatenate(mdl_preds['logits'], axis=0)
 			labels	  = np.concatenate(mdl_preds['labels'], axis=0)
 			others    = mergeList(mdl_preds['others'])
-			pred_prb  = sigmoid(logits)
+			pred_prb  = sigmoid(logits > args.thresh)
 
 			for i, ele in enumerate(others):
 				all_pred[ele['_id']][(ele['start'], ele['end'])] = pred_prb[i]
