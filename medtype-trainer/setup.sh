@@ -3,6 +3,11 @@ BOLD='\033[1;32m\e[1m'
 
 echo -e "${BOLD} MedType> Creating Directories ${DEFAULT}"
 
+if ! python -c "import gdown" &> /dev/null; then
+	echo -e "${BOLD} MedType> Install gdown package ${DEFAULT}"
+	pip install gdown
+fi
+
 check_dir () { 
 	if [ ! -d $1 ] 
 	then 

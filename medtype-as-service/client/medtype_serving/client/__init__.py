@@ -225,54 +225,37 @@ class MedTypeClient(object):
 		return jsonapi.loads(self._recv(req_id).content[1])
 
 	@_timeout
-	def run_linker(self, texts, blocking=True, is_tokenized=False, show_tokens=False):
+	def run_linker(self, msg, blocking=True, show_tokens=False):
 		""" run_linker a list of strings to a list of vectors
 
-		`texts` should be a list of strings, each of which represents a sentence.
-		If `is_tokenized` is set to True, then `texts` should be list[list[str]],
-		outer list represents sentence and inner list represent tokens in the sentence.
-		Note that if `blocking` is set to False, then you need to fetch the result manually afterwards.
+		`msg` should be 'dict' containing two values 'text' and 'entity_linker'. 'text' is an array of string.
 
 		.. highlight:: python
 		.. code-block:: python
 
 			with MedTypeClient() as bc:
-				# run_linker untokenized sentences
 				bc.run_linker(['First do it',
 						  'then do it right',
 						  'then do it better'])
-
-				# run_linker tokenized sentences
-				bc.run_linker([['First', 'do', 'it'],
-						   ['then', 'do', 'it', 'right'],
-						   ['then', 'do', 'it', 'better']], is_tokenized=True)
-
-		:type is_tokenized: bool
-		:type show_tokens: bool
 		:type blocking: bool
 		:type timeout: bool
-		:type texts: list[str] or list[list[str]]
+		:type msg: {'text': list[str], 'entity_linker': str}
 
-		:param is_tokenized: 	whether the input texts is already tokenized
-		:param show_tokens: 	whether to include tokenization result from the server. If true, the return of the function will be a tuple
-		:param texts: 		list of sentence to be encoded. Larger list for better efficiency.
+		:param msg: 		list of sentence to be encoded. Larger list for better efficiency.
 		:param blocking: 	wait until the encoded result is returned from the server. If false, will immediately return.
 		:param timeout: 	throw a timeout error when the encoding takes longer than the predefined timeout.
-		:return: 		encoded sentence/token-level embeddings, rows correspond to sentences
+		:return: 		entity linking output
 		:rtype: 		JSON
 
 		"""
-		if is_tokenized:
-			self._check_input_lst_lst_str(texts)
-		else:
-			self._check_input_lst_str(texts)
+		self._check_input_lst_str(msg['text'])
 
 		if self.length_limit is None:
 			warnings.warn('server does not put a restriction on "max_seq_len", '
 					'it will determine "max_seq_len" dynamically according to the sequences in the batch. '
 					'you can restrict the sequence length on the client side for better efficiency')
 
-		elif self.length_limit and not self._check_length(texts, self.length_limit, is_tokenized):
+		elif self.length_limit and not self._check_length(msg, self.length_limit):
 			warnings.warn('some of your sentences have more tokens than "max_seq_len=%d" set on the server, '
 					'as consequence you may get less-accurate or truncated embeddings.\n'
 					'here is what you can do:\n'
@@ -280,7 +263,7 @@ class MedTypeClient(object):
 					'when you do not want to display this warning\n'
 					'- or, start a new server with a larger "max_seq_len"' % self.length_limit)
 
-		req_id = self._send(jsonapi.dumps(texts), len(texts))
+		req_id = self._send(jsonapi.dumps(msg), len(msg['text']))
 		if not blocking:
 			return None
 
@@ -329,13 +312,9 @@ class MedTypeClient(object):
 		return self.fetch(delay)
 
 	@staticmethod
-	def _check_length(texts, len_limit, tokenized):
-		if tokenized:
-			# texts is already tokenized as list of str
-			return all(len(t) <= len_limit for t in texts)
-		else:
-			# do a simple whitespace tokenizer
-			return all(len(t.split()) <= len_limit for t in texts)
+	def _check_length(texts, len_limit):
+		# do a simple whitespace tokenizer
+		return all(len(t.split()) <= len_limit for t in texts)
 
 	@staticmethod
 	def _check_input_lst_str(texts):
@@ -375,3 +354,76 @@ class MedTypeClient(object):
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
 		self.close()
+
+class BCManager():
+	def __init__(self, available_bc):
+		self.available_bc = available_bc
+		self.bc = None
+
+	def __enter__(self):
+		self.bc = self.available_bc.pop()
+		return self.bc
+
+	def __exit__(self, *args):
+		self.available_bc.append(self.bc)
+		
+class ConcurrentMedTypeClient(MedTypeClient):
+	def __init__(self, max_concurrency=10, **kwargs):
+		""" A thread-safe client object connected to a BertServer
+		Create a MedTypeClient that connects to a BertServer.
+		Note, server must be ready at the moment you are calling this function.
+		If you are not sure whether the server is ready, then please set `check_version=False` and `check_length=False`
+		:type max_concurrency: int
+		:param max_concurrency: the maximum number of concurrent connections allowed
+		"""
+		from medtype_serving.client import MedTypeClient
+
+		self.available_bc = [MedTypeClient(**kwargs) for _ in range(max_concurrency)]
+		self.max_concurrency = max_concurrency
+
+	def close(self):
+		for bc in self.available_bc:
+			bc.close()
+
+	def _concurrent(func):
+		@wraps(func)
+		def arg_wrapper(self, *args, **kwargs):
+			try:
+				with BCManager(self.available_bc) as bc:
+					f = getattr(bc, func.__name__)
+					r = f if isinstance(f, dict) else f(*args, **kwargs)
+				return r
+			except IndexError:
+				raise RuntimeError('Too many concurrent connections!'
+						   'Try to increase the value of "max_concurrency", '
+						   'currently =%d' % self.max_concurrency)
+
+		return arg_wrapper
+
+	@_concurrent
+	def run_linker(self, **kwargs):
+		pass
+
+	@property
+	@_concurrent
+	def server_config(self):
+		pass
+
+	@property
+	@_concurrent
+	def server_status(self):
+		pass
+
+	@property
+	@_concurrent
+	def status(self):
+		pass
+
+	def fetch(self, **kwargs):
+		raise NotImplementedError('Async encoding of "ConcurrentMedTypeClient" is not implemented yet')
+
+	def fetch_all(self, **kwargs):
+		raise NotImplementedError('Async encoding of "ConcurrentMedTypeClient" is not implemented yet')
+
+	def run_linker_async(self, **kwargs):
+		raise NotImplementedError('Async encoding of "ConcurrentMedTypeClient" is not implemented yet')

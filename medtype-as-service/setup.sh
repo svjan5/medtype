@@ -1,8 +1,10 @@
 DEFAULT='\033[0m'
 BOLD='\033[1;32m\e[1m'
 
-echo -e "${BOLD} MedType> Install gdown package ${DEFAULT}"
-pip install gdown
+if ! python -c "import gdown" &> /dev/null; then
+	echo -e "${BOLD} MedType> Install gdown package ${DEFAULT}"
+	pip install gdown
+fi
 
 if [ ! -d "./resources/pretrained_models" ]
 then
@@ -54,9 +56,11 @@ fi
 
 echo -e "${BOLD} MedType> Installing Server and Client Packages ${DEFAULT}"
 cd server
+python setup.py clean
 python setup.py install
 
 cd ../client
+python setup.py clean
 python setup.py install
 
 echo -e "${BOLD} MedType> All Set! ${DEFAULT}"

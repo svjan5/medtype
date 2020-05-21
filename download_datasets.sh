@@ -1,8 +1,10 @@
 DEFAULT='\033[0m'
 BOLD='\033[1;32m\e[1m'
 
-echo -e "${BOLD} MedType> Install gdown package ${DEFAULT}"
-pip install gdown
+if ! python -c "import gdown" &> /dev/null; then
+	echo -e "${BOLD} MedType> Install gdown package ${DEFAULT}"
+	pip install gdown
+fi
 
 if [ ! -d "./datasets" ]
 then

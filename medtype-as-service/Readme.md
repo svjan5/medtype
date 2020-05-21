@@ -146,6 +146,15 @@ medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model
 		      --type2id_json $PWD/../config/type2id.json \
 		      --umls2type_file $PWD/resources/umls2type.pkl \ 
 		      --entity_linker scispacy
+
+# Debug mode: (In case one doesn't want to reinstall the package after every change)
+cd server
+python -c 'import medtype_serving.server.cli as cli; cli.main()'  \
+			  --model_path $PWD/resources/../pretrained_models/pubmed_model.bin \
+		      --type_remap_json $PWD/../../config/type_remap.json \
+		      --type2id_json $PWD/../../config/type2id.json \
+		      --umls2type_file $PWD/../resources/umls2type.pkl \ 
+		      --entity_linker scispacy
 ```
 
 On client side:
@@ -154,10 +163,34 @@ On client side:
 from medtype_serving.client import MedTypeClient
 from pprint import pprint
 
-client = MedTypeClient(ip='localhost')
-text   = ['Symptoms of common cold includes cough, fever, high temperature and nausea.']
-pprint(client.run_linker(text)['elinks'])
+client  = MedTypeClient(ip='localhost')
+message = {
+	'text': ['Symptoms of common cold includes cough, fever, high temperature and nausea.'],
+	'entity_linker': 'scispacy'
+}
+
+pprint(client.run_linker(message)['elinks'])
 ```
+
+### Running HTTP-based Server:
+
+On server side:
+
+```shell
+medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model.bin \
+		      --type_remap_json $PWD/../config/type_remap.json \
+		      --type2id_json $PWD/../config/type2id.json \
+		      --umls2type_file $PWD/resources/umls2type.pkl \ 
+		      --entity_linker scispacy --http_port 8125
+```
+
+On client side:
+
+```python
+curl -X POST http://xx.xx.xx.xx:8125/run_linker   -H 'content-type: application/json'   -d '{"id": 123,"texts": {"text":["Pain in the left leg."], "entity_linker": "scispacy"}}'
+```
+
+
 
 ### Server API
 
@@ -167,7 +200,7 @@ pprint(client.run_linker(text)['elinks'])
 | `type_remap_json`           | str | *Required* | Json file containing semantic type remapping to coarse-grained types |
 | `type2id_json`           | str | *Required* | Json file containing semantic type to identifier mapping |
 | `umls2type_file`           | str | *Required* | Location where UMLS to semantic types mapping is stored |
-| `entity_linker`       | str   | scispacy        | entity linker to use over which MedType is employed. Options: [scispacy, quickumls, ctakes, metamap, metamaplite] |
+| `entity_linker`       | str   | scispacy        | entity linker to use over which MedType is employed. Options: [scispacy, quickumls, ctakes, metamap, metamaplite]. Can load multiple entity linkers as well by concatenating them with `,`. |
 | `model_type` | str | `bert_combined` | Model type. Options: [bert_combined (Bio arcticles/EHR), bert_plain (General)] |
 | `tokenizer_model`     | str   | `bert-base-cased` | Tokenizer used for chunking text.                            |
 | `context_len`         | int   | `120`           | Number of neighboring tokens to consider for predicting semantic type of a mention |

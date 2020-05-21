@@ -1,6 +1,6 @@
 from collections import defaultdict as ddict
 import re, requests
-from .helper import mergeList, clean_text
+from .helper import *
 
 class BaseLinker:
 

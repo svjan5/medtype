@@ -420,7 +420,7 @@ class MedTypeWorkers(Process):
 		self.batch_size 		= args.model_batch_size
 		self.threshold 			= args.threshold
 		self.is_ready			= multiprocessing.Event()
-		self.ent_linker 		= self.get_ent_linker(args.entity_linker)
+		self.ent_linker 		= self.get_linkers(args.entity_linker)
 		self.umls2type 			= umls2type
 		self.type2id 			= type2id
 		self.id2type			= {v: k for k, v in self.type2id.items()}
@@ -430,14 +430,20 @@ class MedTypeWorkers(Process):
 		self.sep_tok	= self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize('[SEP]'))
 
 	
-
-	def get_ent_linker(self, entity_linker):
-		if   entity_linker.lower() == 'scispacy': 	return ScispaCy(self.args)
-		elif entity_linker.lower() == 'quickumls': 	return QUMLS(self.args)
-		elif entity_linker.lower() == 'ctakes': 	return CTakes(self.args)
-		elif entity_linker.lower() == 'metamap': 	return Metamap(self.args)
-		elif entity_linker.lower() == 'metamaplite': 	return MetamapLite(self.args)
+	def get_ent_linker(self, linker):
+		if   linker.lower() == 'scispacy': 	return ScispaCy(self.args)
+		elif linker.lower() == 'quickumls': 	return QUMLS(self.args)
+		elif linker.lower() == 'ctakes': 	return CTakes(self.args)
+		elif linker.lower() == 'metamap': 	return Metamap(self.args)
+		elif linker.lower() == 'metamaplite': 	return MetamapLite(self.args)
 		else: raise NotImplementedError
+
+	def get_linkers(self, linkers_list):
+		ent_linkers = {}
+		for linker in linkers_list.split(','):
+			ent_linkers[linker] = self.get_ent_linker(linker)
+		return ent_linkers
+
 
 	def close(self):
 		self.logger.info('shutting down...')
@@ -572,14 +578,18 @@ class MedTypeWorkers(Process):
 			for sock_idx, sock in enumerate(receivers):
 				if sock in events:
 					client_id, raw_msg	= sock.recv_multipart()
-					text_list		= jsonapi.loads(raw_msg)
-					logger.info('new job\tsocket: %d\tsize: %d\tclient: %s' % (sock_idx, len(text_list), client_id))
+					message			= jsonapi.loads(raw_msg)
+					logger.info('new job\tsocket: %d\tsize: %d\tlinker: %s\tclient: %s' % (sock_idx, len(message['text']), message['entity_linker'], client_id))
 
-					elinks = []
-					for text in text_list:
-						elinks.append(self.ent_linker(text))
-
-					filt_elinks = self.filter_candidates(elinks)
+					if message['entity_linker'] in self.ent_linker:
+						elinks = []
+						for text in message['text']:
+							elinks.append(self.ent_linker[message['entity_linker']](text))
+						filt_elinks = self.filter_candidates(elinks)
+					else:
+						logger.info('Requested linker %s from \tsocket: %d\tclient: %s not loaded on server' % (message['entity_linker'], sock_idx, client_id))
+						elinks = []
+						filt_elinks = []
 
 					sink_embed.send_multipart([client_id, jsonapi.dumps(filt_elinks), ServerCmd.elink_out], copy=True, track=False)
 					logger.info('job done\tsize: %s\tclient: %s' % (len(filt_elinks), client_id))

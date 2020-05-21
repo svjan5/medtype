@@ -25,7 +25,6 @@ class BertPlain(nn.Module):
 		pooled_output	= outputs[1]
 		pooled_output	= self.dropout(pooled_output)
 		logits		= self.classifier(pooled_output)
-		loss 		= F.binary_cross_entropy_with_logits(logits, labels.float())
 
 		if labels is None:
 			return logits

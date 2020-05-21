@@ -6,7 +6,7 @@ import zmq
 from termcolor import colored
 from zmq.utils import jsonapi
 
-__all__ = ['set_logger', 'get_args_parser', 'auto_bind', 'mergeList', 'clean_text', 'TimeContext', 'CappedHistogram']
+__all__ = ['set_logger', 'get_args_parser', 'auto_bind', 'mergeList', 'clean_text', 'replace', 'TimeContext', 'CappedHistogram']
 
 
 def set_logger(context, verbose=False):
