@@ -88,8 +88,8 @@ We make the following resources available in this repository:
 
   * **Dataset statistics:**
 
-    | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
-    | -------- | ------ | ------- | ---------- | ------------- |
+  | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
+  | -------- | ------ | ------- | ---------- | ------------- |
   | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
   | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
   | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
