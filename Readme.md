@@ -61,7 +61,7 @@ We make the following resources available in this repository:
 
 * **medtype-trainer** is for training a MedType model from scratch which can be later used by medtype-as-service. All the details for training and evaluation code for entity linking is provided in `./medtype-trainer`. 
 
-  * **[Online Demo available](medtype.github.io)** :fire:
+  * **[Online Demo available](https://medtype.github.io)** :fire:
     <img align="center"  src="./images/demo.png" alt="...">
 
 * **Datasets!** We make the datasets proposed in the paper publicly available.
