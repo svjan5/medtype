@@ -11,6 +11,8 @@ medtype/datasets/*
 
 Release/
 *.zip
+*.crt
+*.key
 
 *.pyc
 *.swp

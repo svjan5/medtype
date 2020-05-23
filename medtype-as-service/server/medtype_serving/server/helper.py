@@ -1,4 +1,4 @@
-import argparse, pickle, logging, os, sys, time, uuid, warnings, itertools
+import argparse, pickle, logging, os, sys, time, uuid, warnings, itertools, pathlib
 from collections import OrderedDict
 from collections import defaultdict as ddict
 
@@ -6,7 +6,7 @@ import zmq
 from termcolor import colored
 from zmq.utils import jsonapi
 
-__all__ = ['set_logger', 'get_args_parser', 'auto_bind', 'mergeList', 'clean_text', 'replace', 'TimeContext', 'CappedHistogram']
+__all__ = ['set_logger', 'get_args_parser', 'auto_bind', 'mergeList', 'clean_text', 'replace', 'check_file', 'TimeContext', 'CappedHistogram']
 
 
 def set_logger(context, verbose=False):
@@ -94,6 +94,7 @@ def get_args_parser():
 	group3.add_argument('--port_out', '-port_result',type=int, 		default=5556, 	help='server port for sending result to client')
 	group3.add_argument('--http_port', 		type=int, 		default=None, 	help='server port for receiving HTTP requests')
 	group3.add_argument('--http_max_connect', 	type=int, 		default=10, 	help='maximum number of concurrent HTTP connections')
+	group3.add_argument('--enable_https', 		action='store_true', 			help='Enable serving HTTPs requests')
 	group3.add_argument('--cors', 			type=str, 		default='*', 	help='setting "Access-Control-Allow-Origin" for HTTP requests')
 	group3.add_argument('--num_worker', 		type=int, 		default=1, 	help='number of server instances')
 	group3.add_argument('--max_batch_size', 	type=int, 		default=256, 	help='maximum number of sequences handled by each worker')
@@ -116,7 +117,7 @@ def auto_bind(socket):
 	else:
 		# Get the location for tmp file for sockets
 		try:
-			tmp_dir = os.environ['ZEROMQ_SOCK_TMP_DIR']
+			tmp_dir = '/tmp'
 			if not os.path.exists(tmp_dir):
 				raise ValueError('This directory for sockets ({}) does not seems to exist.'.format(tmp_dir))
 			tmp_dir = os.path.join(tmp_dir, str(uuid.uuid1())[:8])
@@ -285,3 +286,6 @@ def replace(s, ch):
 			new_str.append(s[i]) 
 		  
 	return ("".join(i for i in new_str))
+
+def check_file(filename):
+	return pathlib.Path(filename).is_file()

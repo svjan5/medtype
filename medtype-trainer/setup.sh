@@ -75,7 +75,7 @@ fi
 if [ ! -d "./data/pubmed_processed" ]
 then
 	echo -e "${BOLD} MedType> Downloading Processed PubMedDS Data ${DEFAULT}"
-	gdown --id 1CPQnL-Ik1yCeCE8uccP_OmRSEGo4FkDB -O data/pubmed_processed.zip
+	gdown --id 1N9ZqRL36wURWsO8l-XRpAoJBa9TGMyZg -O data/pubmed_processed.zip
 
 	echo -e "${BOLD} MedType> Extracting PubMedDS Data ${DEFAULT}"
 	unzip data/pubmed_processed.zip -d data/

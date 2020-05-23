@@ -50,7 +50,7 @@ if [ ! -d "./datasets/pubmed_ds" ]
 then
 	# For PubMedDS
 	echo -e "${BOLD} MedType> Downloading PubMedDS dataset ${DEFAULT}"
-	gdown --id 1Dx-uAqSM8VVtZv0ciOFBeuvZymKzXvbD -O datasets/pubmed_ds.zip
+	gdown --id 16mEFpCHhFGuQ7zYRAp2PP3XbAFq9MwoM -O datasets/pubmed_ds.zip
 
 	echo -e "${BOLD} MedType> Extracting PubMedDS dataset ${DEFAULT}"
 	unzip datasets/pubmed_ds.zip -d datasets/

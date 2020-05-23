@@ -1,6 +1,6 @@
 from multiprocessing import Process, Event
 from termcolor import colored
-from .helper import set_logger
+from .helper import set_logger, check_file
 
 
 class MedTypeHTTPProxy(Process):
@@ -40,7 +40,7 @@ class MedTypeHTTPProxy(Process):
 				self.bc = ConcurrentMedTypeClient(max_concurrency=self.args.http_max_connect, port=self.args.port, port_out=self.args.port_out)
 			return self.bc.status
 
-		@app.route('/run_linker', methods=['POST'])
+		@app.route('/run_linker', methods=['POST', 'GET'])
 		@as_json
 		def encode_query():
 		# support up to 10 concurrent HTTP requests
@@ -64,4 +64,16 @@ class MedTypeHTTPProxy(Process):
 	def run(self):
 		app = self.create_flask_app()
 		self.is_ready.set()
-		app.run(port=self.args.http_port, threaded=True, host='0.0.0.0')
+
+		if self.args.enable_https:
+			"""
+			Run the following commands
+			$ openssl genrsa 1024 > ssl.key
+			$ openssl req -new -x509 -nodes -sha1 -days 365 -key ssl.key > ssl.crt
+			"""
+			if check_file('ssl.crt') and check_file('ssl.key'):
+				app.run(port=self.args.http_port, threaded=True, host='0.0.0.0', ssl_context=('ssl.crt', 'ssl.key'))
+			else:
+				raise 'ssl.crt and ssl.key files not found run: \nopenssl genrsa 1024 > ssl.key\nopenssl req -new -x509 -nodes -sha1 -days 365 -key ssl.key > ssl.crt'
+		else:
+			app.run(port=self.args.http_port, threaded=True, host='0.0.0.0')

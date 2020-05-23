@@ -130,9 +130,9 @@
 
 ### Pre-trained Models for tackling different domain:
 
-- [**General text**](https://drive.google.com/open?id=1lFFvd7XT9P1ZA_s7NDjUSm2YBRmo2TzM) (trained on WikiMed)
-- [**Bio-Medical Research Articles**](https://drive.google.com/open?id=19DrhHCpwOJX9aUBlDMDmyyQ3eSSdnEzO) (trained on WikiMed+PubMedDS+Annotated PubMed abstracts)
-- [**Electronic Health Records (EHR)**](https://drive.google.com/open?id=1Ft-yeC7af3MtypjejPmvnqcy7xRQuWbp) (trained on WikiMed+PubMedDS+Annotated EHR documents)
+- [**General text**](https://drive.google.com/file/d/1OJ66mvs5yw_EcOEaVEvABzMAWRAsoqR9/view?usp=sharing) (trained on WikiMed)
+- [**Bio-Medical Research Articles**](https://drive.google.com/file/d/1XuFx5_q_6PCYQXNHb50DBc3PhJn2Gy1D/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated PubMed abstracts)
+- [**Electronic Health Records (EHR)**](https://drive.google.com/file/d/1OJ66mvs5yw_EcOEaVEvABzMAWRAsoqR9/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated EHR documents)
 
 ### Usage
 
@@ -184,6 +184,15 @@ medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model
 		      --entity_linker scispacy --http_port 8125
 ```
 
+For enabling serving over HTTPs, execute:
+
+```shell
+openssl genrsa 1024 > ssl.key
+openssl req -new -x509 -nodes -sha1 -days 365 -key ssl.key > ssl.crt
+
+medtype-serving-start --enable_https .....
+```
+
 On client side:
 
 ```python
@@ -215,6 +224,7 @@ curl -X POST http://xx.xx.xx.xx:8125/run_linker   -H 'content-type: application/
 | `port` | int | `5555` | port for pushing data from client to server |
 | `port_out` | int | `5556`| port for publishing results from server to client |
 | `http_port` | int | None | server port for receiving HTTP requests |
+| `enable_https` | bool | False | Enable serving HTTPs requests |
 | `cors` | str | `*` | setting "Access-Control-Allow-Origin" for HTTP requests |
 | `gpu_memory_fraction` | float | `0.5` | the fraction of the overall amount of memory that each GPU should be allocated per worker |
 | `cpu` | bool | False | run on CPU instead of GPU |

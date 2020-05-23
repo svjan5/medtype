@@ -128,7 +128,8 @@ class Metamap(BaseLinker):
 			men_sing = replace(concept.trigger, '"').split('"')[1::2][1::2]
 			mentions = mergeList([[men]*men_cnt[j] for j, men in enumerate(men_sing)])
 
-			for i, (start, offset) in enumerate(pos_info):				
+			for i, (start, offset) in enumerate(pos_info):
+				start = start - 1
 				end = start + offset
 				res_list[(start, end)].append((concept.cui, concept.score))
 
@@ -154,6 +155,7 @@ class MetamapLite(BaseLinker):
 			mentions = replace(concept.trigger, '"').split('"')[0::2][1::2]
 
 			for i, (start, offset) in enumerate(pos_info):
+				start = start - 1
 				end = start + offset
 				res_list[(start, end)].append((concept.cui, concept.score))
 

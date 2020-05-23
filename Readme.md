@@ -52,14 +52,17 @@ We make the following resources available in this repository:
   ```
 
   * We provide three pre-trained models for tackling different domain:
-    - [**General text**](https://drive.google.com/open?id=1lFFvd7XT9P1ZA_s7NDjUSm2YBRmo2TzM) (trained on WikiMed)
-    - [**Bio-Medical Research Articles**](https://drive.google.com/open?id=19DrhHCpwOJX9aUBlDMDmyyQ3eSSdnEzO) (trained on WikiMed+PubMedDS+Annotated PubMed abstracts)
-    - [**Electronic Health Records (EHR)**](https://drive.google.com/open?id=1Ft-yeC7af3MtypjejPmvnqcy7xRQuWbp) (trained on WikiMed+PubMedDS+Annotated EHR documents)
+    - [**General text**](https://drive.google.com/file/d/1OJ66mvs5yw_EcOEaVEvABzMAWRAsoqR9/view?usp=sharing) (trained on WikiMed)
+    - [**Bio-Medical Research Articles**](https://drive.google.com/file/d/1XuFx5_q_6PCYQXNHb50DBc3PhJn2Gy1D/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated PubMed abstracts)
+    - [**Electronic Health Records (EHR)**](https://drive.google.com/file/d/1OJ66mvs5yw_EcOEaVEvABzMAWRAsoqR9/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated EHR documents)
   * Currently, we provide support with the following entity linkers: cTakes, MetaMap, MetaMapLite, QuickUMLS, and ScispaCy. 
   * Instructions for runing **medtype-as-service** follow the instructions given in the readme.md
   * Similar to bert-as-service, **medtype-as-service** is :telescope: **State-of-the-art**, :hatching_chick: **Easy-to-use**, :zap: **Fast**, :octopus: **Scalable**, and :gem: **Reliable**.
 
 * **medtype-trainer** is for training a MedType model from scratch which can be later used by medtype-as-service. All the details for training and evaluation code for entity linking is provided in `./medtype-trainer`. 
+
+  * **[Online Demo available](medtype.github.io)** :fire:
+    <img align="center"  src="./images/demo.png" alt="...">
 
 * **Datasets!** We make the datasets proposed in the paper publicly available.
 
@@ -83,7 +86,18 @@ We make the following resources available in this repository:
     }
     ```
 
-  * The datasets are uploaded on Google Drive: [WikiMed](https://drive.google.com/open?id=16suJCinjfYhw1u1S-gPFmGFQZD331u7I), [PubMedDS](https://drive.google.com/open?id=1Dx-uAqSM8VVtZv0ciOFBeuvZymKzXvbD). We also make two public datasets [MedMentions](https://drive.google.com/open?id=1E_cSs3GJy84oATsMBYE7xMEoif-f4Ei6) and [NCBI Disease corpus](https://drive.google.com/open?id=1SawFWcHgXSwQu-CA5tb46XCbNRIXo4Sf) also available in the same format. All the datasets can be downloaded using the following script:
+  * **Dataset statistics:**
+
+    | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
+    | -------- | ------ | ------- | ---------- | ------------- |
+  | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
+  | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
+  | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
+  | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
+  | **WikiMedDS** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
+  | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
+
+  * The datasets are uploaded on Google Drive: [WikiMed](https://drive.google.com/open?id=16suJCinjfYhw1u1S-gPFmGFQZD331u7I), [PubMedDS](https://drive.google.com/file/d/16mEFpCHhFGuQ7zYRAp2PP3XbAFq9MwoM/view?usp=sharing). We also make two public datasets [MedMentions](https://drive.google.com/open?id=1E_cSs3GJy84oATsMBYE7xMEoif-f4Ei6) and [NCBI Disease corpus](https://drive.google.com/open?id=1SawFWcHgXSwQu-CA5tb46XCbNRIXo4Sf) also available in the same format. All the datasets can be downloaded using the following script:
 
     ```shell
     ./download_datasets.sh

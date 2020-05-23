@@ -525,8 +525,12 @@ class MedTypeWorkers(Process):
 				men['pred_type'] = out[t_id][m_id]
 
 				# No filtering when predicted type is NA
-				if len(men['pred_type']) == 0:  men['filtered_candidates'] = men['candidates']
-				else: 				men['filtered_candidates'] = [[cui, scr] for cui, scr in men['candidates'] if len(self.umls2type[cui] & men['pred_type']) != 0]
+				if len(men['pred_type']) == 0:  
+					men['filtered_candidates'] = men['candidates']
+				else: 				
+					men['filtered_candidates'] = [[cui, scr] for cui, scr in men['candidates'] if len(self.umls2type.get(cui, set()) & men['pred_type']) != 0]
+					if len(men['filtered_candidates']) == 0:
+						men['filtered_candidates'] = men['candidates']
 
 				men['pred_type'] = list(men['pred_type'])	# set is not JSON serializable
 				mentions.append(men)
