@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2005.00460"><img src="http://img.shields.io/badge/Paper-PDF-red.svg"></a>
+  <a href="https://medtype.github.io"><img src="http://img.shields.io/badge/Demo-Live-green.svg"></a>
   <a href="https://github.com/svjan5/medtype/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
   </a>

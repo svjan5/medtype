@@ -50,7 +50,10 @@ class MedTypeHTTPProxy(Process):
 			data = request.form if request.form else request.json
 			try:
 				logger.info('new request from %s' % request.remote_addr)
-				return {'id': data['id'], 'result': self.bc.run_linker(data['data'])}
+				if data is None or 'data' not in data:
+					return {'id': data['id'], 'result': 'Sever accessible :)! Did not get any text though.'}
+				else:
+					return {'id': data['id'], 'result': self.bc.run_linker(data['data'])}
 
 			except Exception as e:
 				logger.error('error when handling HTTP request', exc_info=True)
