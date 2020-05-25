@@ -175,7 +175,7 @@ pprint(client.run_linker(message)['elinks'])
 
 ### Running HTTP-based Server:
 
-On server side:
+**On server side:**
 
 ```shell
 medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model.bin \
@@ -185,7 +185,7 @@ medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model
 		      --entity_linker scispacy --http_port 8125
 ```
 
-For enabling serving over HTTPs, execute:
+For serving over HTTPs, execute:
 
 ```shell
 openssl genrsa 1024 > ssl.key
@@ -193,11 +193,12 @@ openssl req -new -x509 -nodes -sha1 -days 365 -key ssl.key > ssl.crt
 
 medtype-serving-start --enable_https .....
 ```
+The above script has been used for hosting our [online demo](http://medtype.github.io/).
 
-On client side:
+**On client side:**
 
 ```python
-curl -X POST http://xx.xx.xx.xx:8125/run_linker   -H 'content-type: application/json'   -d '{"id": 123,"texts": {"text":["Pain in the left leg."], "entity_linker": "scispacy"}}'
+curl -X POST http://xx.xx.xx.xx:8125/run_linker   -H 'content-type: application/json'   -d '{"id": 123,"data": {"text":["Pain in the left leg."], "entity_linker": "scispacy"}}'
 ```
 
 
