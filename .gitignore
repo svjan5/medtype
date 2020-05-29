@@ -4,8 +4,7 @@ medtype-trainer/logs/*
 medtype-trainer/predictions/*
 medtype-trainer/results/*
 medtype-as-service/resources/*
-medtype/datasets/*
-medtype/datasets/*
+/datasets/*
 
 */__pycache__/*
 

@@ -562,7 +562,7 @@ class MedTypeWorkers(Process):
 		logger.info('ready and listening!')
 		self.is_ready.set()
 		
-		if self.device_id != '-1' and torch.cuda.is_available():
+		if str(self.device_id) != '-1' and torch.cuda.is_available():
 			self.device = torch.device('cuda:{}'.format(self.device_id))
 			torch.cuda.set_rng_state(torch.cuda.get_rng_state())
 			torch.backends.cudnn.deterministic = True

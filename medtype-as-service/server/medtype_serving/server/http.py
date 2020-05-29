@@ -51,7 +51,7 @@ class MedTypeHTTPProxy(Process):
 			try:
 				logger.info('new request from %s' % request.remote_addr)
 				if data is None or 'data' not in data:
-					return {'id': data['id'], 'result': 'Sever accessible :)! Did not get any text though.'}
+					return {'id': 1, 'result': 'Sever accessible :)! Please go back to the demo page.'}
 				else:
 					return {'id': data['id'], 'result': self.bc.run_linker(data['data'])}
 
