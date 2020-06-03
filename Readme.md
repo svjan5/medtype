@@ -13,7 +13,7 @@
   </a>
 </p>
 
-
+Note: Please [email](svashish@andrew.cmu.edu) for requesting the updated version of the PDF.
 
 <h2 align="center">
   What is MedType?
@@ -91,7 +91,7 @@ We make the following resources available in this repository:
     ```shell
     ./download_datasets.sh
     ```
-   * **Datasets statistics:**
+   * **Datasets statistics:** (Different from arxiv paper)
  
    | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
    | -------- | ------ | ------- | ---------- | ------------- |
