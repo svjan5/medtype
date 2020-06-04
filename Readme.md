@@ -13,7 +13,7 @@
   </a>
 </p>
 
-Note: Please [email](svashish@andrew.cmu.edu) for requesting the updated version of the PDF.
+Note: Please send an [email](svashish@andrew.cmu.edu) for requesting an updated version of the paper.
 
 <h2 align="center">
   What is MedType?
