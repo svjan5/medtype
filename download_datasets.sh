@@ -12,6 +12,17 @@ then
 	mkdir datasets
 fi
 
+if [ ! -f "./datasets/wikipedia2umls.json" ]
+then
+	# For Wikipedia to UMLS Mapping
+	echo -e "${BOLD} MedType> Downloading Wikipedia to UMLS mapping ${DEFAULT}"
+	gdown --id 1WjSEn2UNoYgpWcRI2Up2eRXIsnSvEnna -O datasets/wikipedia2umls.zip
+
+	echo -e "${BOLD} MedType> Extracting Wikipedia to UMLS mapping ${DEFAULT}"
+	unzip datasets/wikipedia2umls.zip -d datasets/
+	rm -f datasets/wikipedia2umls.zip
+fi
+
 if [ ! -f "./datasets/medmentions.json" ]
 then
 	# For MedMentions
