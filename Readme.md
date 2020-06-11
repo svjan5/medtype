@@ -13,7 +13,7 @@
   </a>
 </p>
 
-
+Note: Please send an [email](svashish@andrew.cmu.edu) for requesting an updated version of the paper.
 
 <h2 align="center">
   What is MedType?
@@ -94,18 +94,16 @@ We make the following resources available in this repository:
     ```shell
     ./download_datasets.sh
     ```
-
-   * **Datasets statistics:**
-
-  | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
-  | -------- | ------ | ------- | ---------- | ------------- |
-  | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
-  | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
-  | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
-  | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
-  | **WikiMed** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
-  | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
-
+   * **Datasets statistics:** (Different from arxiv paper)
+ 
+   | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
+   | -------- | ------ | ------- | ---------- | ------------- |
+   | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
+   | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
+   | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
+   | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
+   | **WikiMed** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
+   | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
 
 <h2 align="center">
   Citation
