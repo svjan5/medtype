@@ -92,7 +92,7 @@ We make the following resources available in this repository:
     ```shell
     ./download_datasets.sh
     ```
-   * **Datasets statistics:** (Different from arxiv paper)
+   * **Datasets statistics:** 
  
    | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
    | -------- | ------ | ------- | ---------- | ------------- |
