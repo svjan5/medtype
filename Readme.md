@@ -111,8 +111,8 @@ Please consider citing our paper if you use this code in your work.
 
 ```bibtex
 @ARTICLE{medtype2020,
-       author = {{Vashishth}, Shikhar and {Joshi}, Rishabh and {Dutt}, Ritam and
-         {Newman-Griffis}, Denis and {Rose}, Carolyn},
+       author = {{Vashishth}, Shikhar and {Joshi}, Rishabh and {Newman-Griffis}, Denis and
+         {Dutt}, Ritam and {Rose}, Carolyn},
         title = "{MedType: Improving Medical Entity Linking with Semantic Type Prediction}",
       journal = {arXiv e-prints},
      keywords = {Computer Science - Computation and Language},
