@@ -151,7 +151,7 @@ medtype-serving-start --model_path $PWD/resources/pretrained_models/pubmed_model
 # Debug mode: (In case one doesn't want to reinstall the package after every change)
 cd server
 python -c 'import medtype_serving.server.cli as cli; cli.main()'  \
-			  --model_path $PWD/resources/../pretrained_models/pubmed_model.bin \
+			  --model_path $PWD/../resources/pretrained_models/pubmed_model.bin \
 		      --type_remap_json $PWD/../../config/type_remap.json \
 		      --type2id_json $PWD/../../config/type2id.json \
 		      --umls2type_file $PWD/../resources/umls2type.pkl \ 
