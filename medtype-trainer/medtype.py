@@ -4,7 +4,7 @@ from dataloader import MedTypeDataset
 
 from torch.utils.data import DataLoader
 from transformers.optimization import AdamW
-from transformers import get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup, BertTokenizer
 from sklearn.metrics import average_precision_score
 
 class MedType(object):
@@ -60,8 +60,11 @@ class MedType(object):
 
 		self.logger.info('\nDataset size -- Train: {}, Valid: {}, Test:{}'.format(len(self.data['train']), len(self.data['valid']), len(self.data['test'])))
 
+		self.tokenizer 	= BertTokenizer.from_pretrained(self.p.bert_model)
+		self.tokenizer.add_tokens(['[MENTION]', '[/MENTION]'])
+
 		def get_data_loader(split, shuffle=True):
-			dataset	= MedTypeDataset(self.data[split], self.num_class, self.p)
+			dataset	= MedTypeDataset(self.data[split], self.num_class, self.tokenizer, self.p)
 			return DataLoader(
 					dataset,
 					batch_size      = self.p.batch_size * self.p.batch_factor,
@@ -87,8 +90,8 @@ class MedType(object):
 		Creates the computational graph for model and initializes it
 		
 		"""
-		if 	self.p.model == 'bert_plain': 		model = BertPlain(self.p, self.num_class)
-		elif 	self.p.model == 'bert_combined': 	model = BertCombined(self.p, self.num_class)
+		if 	self.p.model == 'bert_plain': 		model = BertPlain(self.p, len(self.tokenizer), self.num_class)
+		elif 	self.p.model == 'bert_combined': 	model = BertCombined(self.p, len(self.tokenizer), self.num_class)
 		else:	raise NotImplementedError
 
 		model = model.to(self.device)
@@ -252,12 +255,12 @@ class MedType(object):
 		batch		= to_gpu(batch, self.device)
 		loss, logits 	= self.model(
 					input_ids	= batch['tok_pad'], 
-					attention_mask 	= batch['tok_mask'], 
-					position_ids 	= batch['tok_pos'],
-					labels  	= batch['labels']
+					attention_mask	= batch['tok_mask'], 
+					mention_pos_idx	= batch['men_pos'],
+					labels		= batch['labels']
 				)
 
-		if len(self.gpu_list) > 1: 
+		if len(self.gpu_list) > 1:
 			loss = loss.mean()
 
 		return loss, logits
@@ -404,7 +407,7 @@ class MedType(object):
 					self.logger.info('Early Stopping!')
 					break
 
-			self.mongo_log.add_results(self.best_val, self.best_test, self.best_epoch, train_loss)
+			self.logger.info('Train loss: {:3}, Valid Perf: {:.3}'.format(train_loss, self.best_val))
 
 		self.logger.info('Best Performance: {}'.format(self.best_test)) 
 
