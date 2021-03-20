@@ -426,8 +426,11 @@ class MedTypeWorkers(Process):
 		self.id2type			= {v: k for k, v in self.type2id.items()}
 
 		self.tokenizer	= BertTokenizer.from_pretrained(self.tokenizer_model)
+		self.tokenizer.add_tokens(['[MENTION]', '[/MENTION]'])
 		self.cls_tok	= self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize('[CLS]'))
 		self.sep_tok	= self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize('[SEP]'))
+		self.men_start  = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize('[MENTION]'))
+		self.men_end 	= self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize('[/MENTION]'))
 
 	
 	def get_ent_linker(self, linker):
@@ -459,20 +462,20 @@ class MedTypeWorkers(Process):
 	def pad_data(self, data):
 		max_len  = np.max([len(x['toks']) for x in data])
 		tok_pad	 = np.zeros((len(data), max_len), np.int32)
-		tok_pos  = np.zeros((len(data), max_len), np.int32)
 		tok_mask = np.zeros((len(data), max_len), np.float32)
+		men_pos  = np.zeros((len(data)), np.int32)
 		meta 	 = []
 
 		for i, ele in enumerate(data):
-			tok_pad[i, :len(ele['toks'])]  = ele['toks']
-			tok_pos[i, :len(ele['toks'])]  = ele['toks_pos']
-			tok_mask[i, :len(ele['toks'])] = 1.0
+			tok_pad[i, :len(ele['toks'])]   = ele['toks']
+			tok_mask[i, :len(ele['toks'])]  = 1.0
+			men_pos[i] 			= ele['men_pos'] 
 			meta.append({
 				'text_id': ele['text_id'],
 				'men_id' : ele['men_id']
 			})
 
-		return torch.LongTensor(tok_pad).to(self.device), torch.LongTensor(tok_pos).to(self.device), torch.FloatTensor(tok_mask).to(self.device), meta
+		return torch.LongTensor(tok_pad).to(self.device), torch.FloatTensor(tok_mask).to(self.device), torch.LongTensor(men_pos).to(self.device), meta
 
 	def get_batches(self, elinks):
 		data_list = []
@@ -486,14 +489,13 @@ class MedTypeWorkers(Process):
 				mention   = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(text[start:end]))
 				prev_toks = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(text[:start]))[-self.context_len//2:]
 				next_toks = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(text[end:]))[:self.context_len//2]
-				toks	  = self.cls_tok + prev_toks + mention + next_toks + self.sep_tok
-				toks_pos  = np.concatenate([np.arange(len(prev_toks), -1, -1), [0]*len(mention), np.arange(len(next_toks)+1)])
+				toks	  = self.cls_tok + prev_toks + self.men_start + mention + self.men_end + next_toks + self.sep_tok
 
 				data_list.append({
 					'text_id'	: t_id,
 					'men_id'	: m_id,
-					'toks'		: toks, 
-					'toks_pos'	: toks_pos
+					'toks'		: toks,
+					'men_pos'	: len(prev_toks) + 1
 				})
 
 		num_batches = int(np.ceil(len(data_list) / self.batch_size))
@@ -507,10 +509,11 @@ class MedTypeWorkers(Process):
 		with torch.no_grad():
 
 			for batch in self.get_batches(elinks):
+
 				logits = self.model(
 						input_ids	= batch[0], 
-						position_ids 	= batch[1],
-						attention_mask 	= batch[2]
+						attention_mask 	= batch[1],
+						mention_pos_idx = batch[2]
 					)
 
 				preds = (torch.sigmoid(logits) > self.threshold).cpu().numpy()
@@ -569,12 +572,12 @@ class MedTypeWorkers(Process):
 		else:
 			self.device = torch.device('cpu')
 
-		if   self.model_type.lower() == 'bert_combined': self.model = BertCombined(len(self.type2id), self.dropout)
-		elif self.model_type.lower() == 'bert_plain':    self.model = BertPlain(len(self.type2id), self.dropout)
+		if   self.model_type.lower() == 'bert_combined': self.model = BertCombined(len(self.tokenizer), len(self.type2id), self.dropout)
+		elif self.model_type.lower() == 'bert_plain':    self.model = BertPlain(len(self.tokenizer), len(self.type2id), self.dropout)
 		else: raise NotImplementedError
 
 		self.model.to(self.device)
-		self.model.load_state_dict(self.model_params)
+		self.model.load_state_dict(self.model_params, strict=False)
 
 		logger	= set_logger(colored('WORKER-%d' % self.worker_id, 'yellow'), self.verbose)
 		while not self.exit_flag.is_set():

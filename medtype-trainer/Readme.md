@@ -111,9 +111,9 @@ For training a model for general text corpus, just use the model trained on `Wik
 
 We provide three pre-trained models for tackling different domain:
 
-- [**General text**](https://drive.google.com/file/d/1OJ66mvs5yw_EcOEaVEvABzMAWRAsoqR9/view?usp=sharing) (trained on WikiMed)
-- [**Bio-Medical Research Articles**](https://drive.google.com/file/d/1XuFx5_q_6PCYQXNHb50DBc3PhJn2Gy1D/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated PubMed abstracts)
-- [**Electronic Health Records (EHR)**](https://drive.google.com/file/d/1OJ66mvs5yw_EcOEaVEvABzMAWRAsoqR9/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated EHR documents)
+- [**General text**](https://drive.google.com/file/d/15vKHwzEa_jcipyEDClNSzJguPxk0VOC7/view?usp=sharing) (trained on WikiMed)
+- [**Bio-Medical Research Articles**](https://drive.google.com/file/d/1So-FMFyPMup84VvbWqH7Cars8jfjEIx_/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated PubMed abstracts)
+- [**Electronic Health Records (EHR)**](https://drive.google.com/file/d/1t2QlpEWnHOMdts4h3y55hVA9Wh2ZbjKi/view?usp=sharing) (trained on WikiMed+PubMedDS+Annotated EHR documents)
 
 ### Evaluation
 

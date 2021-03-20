@@ -2,66 +2,69 @@ import torch, torch.nn as nn
 from transformers import BertTokenizer, BertModel, BertConfig, BertPreTrainedModel
 
 class BertPlain(nn.Module):
-	def __init__(self, num_labels, dropout):
+	def __init__(self, num_tokens, num_labels, dropout):
 		super().__init__()
 		
 		self.bert 	= BertModel.from_pretrained('bert-base-cased')
+		self.bert.resize_token_embeddings(num_tokens)
 		self.dropout	= nn.Dropout(dropout)
 		self.classifier	= nn.Linear(self.bert.config.hidden_size, num_labels)
 	
-	def forward(self, input_ids=None, attention_mask=None, token_type_ids=None, position_ids=None, head_mask=None, inputs_embeds=None, labels=None):
+	def forward(self, input_ids, attention_mask, mention_pos_idx, labels=None):
 		outputs = self.bert(
 			input_ids 	= input_ids,
-			attention_mask	= attention_mask,
-			token_type_ids	= token_type_ids,
-			position_ids	= position_ids,
-			head_mask	= head_mask,
-			inputs_embeds	= inputs_embeds
+			attention_mask	= attention_mask
 		)
 
-		pooled_output	= outputs[1]
-		pooled_output	= self.dropout(pooled_output)
-		logits		= self.classifier(pooled_output)
+		tok_embed	= outputs[0]
+		bsz, mtok, dim  = tok_embed.shape
+		tok_embed_flat	= tok_embed.reshape(-1, dim)
+		men_idx 	= torch.arange(bsz).to(tok_embed.device) * mtok + mention_pos_idx
+		men_embed 	= tok_embed_flat[men_idx]
 
+		pooled_output	= self.dropout(men_embed)
+		logits		= self.classifier(pooled_output)
+		
 		return logits
 
 class BertCombined(nn.Module):
 
-	def __init__(self, num_labels, dropout):
+	def __init__(self, num_tokens, num_labels, dropout):
 		super().__init__()
-		
-		self.bert_wiki		= BertModel.from_pretrained('bert-base-cased')
-		self.bert_pubmed	= BertModel.from_pretrained('bert-base-cased')
+
+		self.bert_wiki		= BertModel.from_pretrained('bert-base-cased'); self.bert_wiki.resize_token_embeddings(num_tokens)
+		self.bert_pubmed	= BertModel.from_pretrained('bert-base-cased'); self.bert_pubmed.resize_token_embeddings(num_tokens)
+
 		self.dropout		= nn.Dropout(dropout)
 
-		class_in		= self.bert_wiki.config.hidden_size + self.bert_pubmed.config.hidden_size
-		self.classifier		= nn.Linear(class_in, num_labels)
+		class_in 		= self.bert_wiki.config.hidden_size * 2
+		self.classifier	 	= nn.Linear(class_in, num_labels)
 
-	def forward(self, input_ids=None, attention_mask=None, token_type_ids=None, position_ids=None, head_mask=None, inputs_embeds=None, labels=None):
+	def forward(self, input_ids, attention_mask, mention_pos_idx, labels=None):
 		out_wiki = self.bert_wiki(
 			input_ids 	= input_ids,
-			attention_mask	= attention_mask,
-			token_type_ids	= token_type_ids,
-			position_ids	= position_ids,
-			head_mask	= head_mask,
-			inputs_embeds	= inputs_embeds,
+			attention_mask	= attention_mask
 		)
-
-		pooled_wiki = out_wiki[1]
 
 		out_pubmed = self.bert_pubmed(
 			input_ids 	= input_ids,
-			attention_mask	= attention_mask,
-			token_type_ids	= token_type_ids,
-			position_ids	= position_ids,
-			head_mask	= head_mask,
-			inputs_embeds	= inputs_embeds,
+			attention_mask	= attention_mask
 		)
 
-		pooled_pubmed   = out_pubmed[1]
-		pooled_output   = torch.cat([pooled_wiki, pooled_pubmed], dim=1)
+		tok_embed	= out_wiki[0]
+		bsz, mtok, dim  = tok_embed.shape
+		tok_embed_flat	= tok_embed.reshape(-1, dim)
+		men_idx 	= torch.arange(bsz).to(tok_embed.device) * mtok + mention_pos_idx
+		wiki_embed 	= tok_embed_flat[men_idx]
+
+		tok_embed	= out_pubmed[0]
+		bsz, mtok, dim  = tok_embed.shape
+		tok_embed_flat	= tok_embed.reshape(-1, dim)
+		men_idx 	= torch.arange(bsz).to(tok_embed.device) * mtok + mention_pos_idx
+		pubmed_embed 	= tok_embed_flat[men_idx]
+
+		pooled_output 	= torch.cat([wiki_embed, pubmed_embed], dim=1)
 		pooled_output	= self.dropout(pooled_output)
 		logits		= self.classifier(pooled_output)
 
 		return logits
-		

@@ -93,7 +93,7 @@ if [ ! -f "./models/pretrained_models/general_model.bin" ]
 then
 	# Pretrained model for General domain text
 	echo -e "${BOLD} MedType> Downloading pre-trained model for general articles: general_model.bin ${DEFAULT}"
-	gdown --id 1lFFvd7XT9P1ZA_s7NDjUSm2YBRmo2TzM -O models/pretrained_models/general_model.zip
+	gdown --id 15vKHwzEa_jcipyEDClNSzJguPxk0VOC7 -O models/pretrained_models/general_model.zip
 
 	echo -e "${BOLD} MedType> Extracting model ${DEFAULT}"
 	unzip models/pretrained_models/general_model.zip -d models/pretrained_models/
@@ -104,7 +104,7 @@ if [ ! -f "./models/pretrained_models/pubmed_model.bin" ]
 then
 	# Pretrained model for Biomedical research articles
 	echo -e "${BOLD} MedType> Downloading pre-trained model for biomedical articles: pubmed_model.bin ${DEFAULT}"
-	gdown --id 19DrhHCpwOJX9aUBlDMDmyyQ3eSSdnEzO -O models/pretrained_models/pubmed_model.zip
+	gdown --id 1So-FMFyPMup84VvbWqH7Cars8jfjEIx_ -O models/pretrained_models/pubmed_model.zip
 
 	echo -e "${BOLD} MedType> Extracting model ${DEFAULT}"
 	unzip models/pretrained_models/pubmed_model.zip -d models/pretrained_models/
@@ -116,7 +116,7 @@ if [ ! -f "./models/pretrained_models/ehr_model.bin" ]
 then
 	# Pretrained model for EHR documents
 	echo -e "${BOLD} MedType> Downloading pre-trained model for Electronic Health Records (EHRs): ehr_model.bin ${DEFAULT}"
-	gdown --id 1Ft-yeC7af3MtypjejPmvnqcy7xRQuWbp -O models/pretrained_models/ehr_model.zip
+	gdown --id 1t2QlpEWnHOMdts4h3y55hVA9Wh2ZbjKi -O models/pretrained_models/ehr_model.zip
 
 	echo -e "${BOLD} MedType> Extracting model ${DEFAULT}"
 	unzip models/pretrained_models/ehr_model.zip -d models/pretrained_models/
