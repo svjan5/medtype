@@ -7,41 +7,79 @@ from pprint import pprint
 from collections import OrderedDict
 from collections import defaultdict as ddict, Counter
 
-def partition(lst, n):
-        division = len(lst) / float(n)
-        return [ lst[int(round(division * i)): int(round(division * (i + 1)))] for i in range(n) ]
 
 def getChunks(inp_list, chunk_size):
+	"""
+	Splits inp_list into lists of size chunk_size
+	Parameters
+	----------
+	inp_list:       List to be splittted
+	chunk_size:     Size of each chunk required
+	
+	Returns
+	-------
+	chunks of the inp_list each of size chunk_size, last one can be smaller (leftout data)
+	"""
 	return [inp_list[x:x+chunk_size] for x in range(0, len(inp_list), chunk_size)]
 
-def mergeList(list_of_list):
-	return list(itertools.chain.from_iterable(list_of_list))
-
-def dump_pickle(obj, fname):
-	pickle.dump(obj, open(fname, 'wb'))
-	print('Pickled Dumped {}'.format(fname))
-
-def load_pickle(fname):
-	return pickle.load(open(fname, 'rb'))
 
 def make_dir(dirpath):
+	"""
+	Makes directory at the specified path if it does not exist
+
+	Parameters
+	----------
+	dirpath:	Path to directory
+	
+	Returns
+	-------
+		
+	"""
 	if not os.path.exists(dirpath):
 		os.makedirs(dirpath)
 
 def checkFile(filename):
+	"""
+	Checks whether file exist at the given path or not
+	Parameters
+	----------
+	filename:	File path
+	
+	Returns
+	-------
+		
+	"""
 	return pathlib.Path(filename).is_file()
 
-def str_proc(x):
-	return str(x).strip().lower()
-
 def set_gpu(gpus):
+	"""
+	Sets the GPU to be used for the run
+	Parameters
+	----------
+	gpus:           List of GPUs to be used for the run
+	
+	Returns
+	-------
+		
+	"""
 	os.environ["CUDA_DEVICE_ORDER"]    = "PCI_BUS_ID"
 	os.environ["CUDA_VISIBLE_DEVICES"] = gpus
 
-def count_parameters(model):
-	return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def get_logger(name, log_dir, config_dir):
+	"""
+	Creates a logger object
+	Parameters
+	----------
+	name:           Name of the logger file
+	log_dir:        Directory where logger file needs to be stored
+	config_dir:     Directory from where log_config.json needs to be read
+	
+	Returns
+	-------
+	A logger object which writes to both file and stdout
+		
+	"""
 	config_dict = json.load(open('{}/log_config.json'.format(config_dir)))
 	config_dict['handlers']['file_handler']['filename'] = '{}/{}'.format(log_dir, name.replace('/', '-'))
 	logging.config.dictConfig(config_dict)
@@ -53,6 +91,26 @@ def get_logger(name, log_dir, config_dir):
 	logger.addHandler(consoleHandler)
 
 	return logger
+
+def str_proc(x):
+	return str(x).strip().lower()
+
+def partition(lst, n):
+        division = len(lst) / float(n)
+        return [ lst[int(round(division * i)): int(round(division * (i + 1)))] for i in range(n) ]
+
+def mergeList(list_of_list):
+	return list(itertools.chain.from_iterable(list_of_list))
+
+def dump_pickle(obj, fname):
+	pickle.dump(obj, open(fname, 'wb'))
+	print('Pickled Dumped {}'.format(fname))
+
+def load_pickle(fname):
+	return pickle.load(open(fname, 'rb'))
+
+def count_parameters(model):
+	return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def to_gpu(batch, dev):
 	batch_gpu = {}

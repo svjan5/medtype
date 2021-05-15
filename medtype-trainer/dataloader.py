@@ -4,6 +4,10 @@ from torch.utils.data import Dataset
 from transformers import BertTokenizer
 
 class MedTypeDataset(Dataset):
+	"""
+	Dataset for creating batches for MedType.
+
+	"""
 	def __init__(self, dataset, num_class, tokenizer, params):
 		self.dataset	= dataset
 		self.num_class 	= num_class

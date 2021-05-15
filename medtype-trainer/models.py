@@ -4,6 +4,18 @@ from torch.nn import functional as F
 from transformers import BertModel
 
 class BertPlain(nn.Module):
+	"""
+	MedType Bert-based Architecture. 
+	----------
+	params:        	Hyperparameters of the model
+	num_tokens:   	Number of tokens in BERT model
+	num_labels:	Total number of classes
+	
+	Returns
+	-------
+	The MedType model instance
+		
+	"""
 	def __init__(self, params, num_tokens, num_labels):
 		super().__init__()
 		
@@ -33,7 +45,18 @@ class BertPlain(nn.Module):
 		return loss, logits
 
 class BertCombined(nn.Module):
-
+	"""
+	MedType Bert-based Architecture which combines benefits of both WikiMed and PubMedDS dataset. 
+	----------
+	params:        	Hyperparameters of the model
+	num_tokens:   	Number of tokens in BERT model
+	num_labels:	Total number of classes
+	
+	Returns
+	-------
+	The MedType model instance
+		
+	"""
 	def __init__(self, params, num_tokens, num_labels):
 		super().__init__()
 
