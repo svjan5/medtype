@@ -63,7 +63,32 @@ We make the following resources available in this repository:
   * **[Online Demo available](https://medtype.github.io)** :fire:
   <img align="center"  src="./images/demo.png" alt="...">
 
-* **Datasets!** We make the datasets proposed in the paper publicly available.
+<h2 align="center">
+  Datasets
+</h2>
+
+We present two new, automatically-created datasets (available on Google Drive):
+* **[WikiMed](https://drive.google.com/open?id=16suJCinjfYhw1u1S-gPFmGFQZD331u7I)**: Over 1 million mentions of biomedical concepts in Wikipedia pages
+  * Mentions were automatically identified based on links to Wikipedia pages for medical concepts.
+  * Mentions of concepts _not_ linked to Wikipedia pages are not included in the dataset.
+* **[PubMedDS](https://drive.google.com/file/d/16mEFpCHhFGuQ7zYRAp2PP3XbAFq9MwoM/view?usp=sharing)**: Over 57 million mentions of biomedical concepts in abstracts of biomedical research papers on PubMed.
+  * Mentions were automatically identified using distant supervision, based on and a machine learning NER model in [scispaCy](https://allenai.github.io/scispacy/).
+  * Concept identification focused on MeSH headers assigned to the papers.
+  * Comparison with manually-annotated datasets found 75-90% precision in the automatic annotations.
+
+
+**Datasets statistics:** 
+ 
+   | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
+   | -------- | ------ | ------- | ---------- | ------------- |
+   | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
+   | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
+   | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
+   | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
+   | **WikiMed** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
+   | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
+
+Formatting information:
 
   * Both **WikiMed**, **PubMedDS** are in `JSON` format with one document per line. Each document has the following structure:
 
@@ -85,23 +110,13 @@ We make the following resources available in this repository:
     }
     ```
 
-  * The datasets are uploaded on Google Drive: [WikiMed](https://drive.google.com/open?id=16suJCinjfYhw1u1S-gPFmGFQZD331u7I), [PubMedDS](https://drive.google.com/file/d/16mEFpCHhFGuQ7zYRAp2PP3XbAFq9MwoM/view?usp=sharing). We also make two public datasets [MedMentions](https://drive.google.com/open?id=1E_cSs3GJy84oATsMBYE7xMEoif-f4Ei6) and [NCBI Disease corpus](https://drive.google.com/open?id=1SawFWcHgXSwQu-CA5tb46XCbNRIXo4Sf) also available in the same format. The mapping from Wikipedia to UMLS used for creating the WikiMed dataset has also been made [available](https://drive.google.com/file/d/1WjSEn2UNoYgpWcRI2Up2eRXIsnSvEnna/view?usp=sharing).
+  * We also make two public datasets [MedMentions](https://drive.google.com/open?id=1E_cSs3GJy84oATsMBYE7xMEoif-f4Ei6) and [NCBI Disease corpus](https://drive.google.com/open?id=1SawFWcHgXSwQu-CA5tb46XCbNRIXo4Sf) also available in the same format. The mapping from Wikipedia to UMLS used for creating the WikiMed dataset has also been made [available](https://drive.google.com/file/d/1WjSEn2UNoYgpWcRI2Up2eRXIsnSvEnna/view?usp=sharing).
 
   * All the datasets along with the mapping from Wikipedia to UMLS can be downloaded using the following script:
 
     ```shell
     ./download_datasets.sh
     ```
-   * **Datasets statistics:** 
- 
-   | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
-   | -------- | ------ | ------- | ---------- | ------------- |
-   | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
-   | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
-   | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
-   | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
-   | **WikiMed** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
-   | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
 
 <h2 align="center">
   Citation
