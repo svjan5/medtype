@@ -93,19 +93,22 @@ We make the following resources available in this repository:
     ./download_datasets.sh
     ```
    * **Datasets statistics:** 
- 
-   | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
-   | -------- | ------ | ------- | ---------- | ------------- |
-   | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
-   | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
-   | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
-   | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
-   | **WikiMed** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
-   | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
+
+  | Datasets | \#Docs | \#Sents | \#Mentions | #Unq Concepts |
+  | -------- | ------ | ------- | ---------- | ------------- |
+  | NCBI    | 792    | 7,645    | 6,817    | 1,638 |
+  | Bio CDR    | 1,500    | 14,166    | 28,559    | 9,149 |
+  | Sharecorpus    | 431    | 27,246    | 17,809    | 1,719 |
+  | MedMentions    | 4,392    | 42,602    | 352,496    | 34,724 |
+  | **WikiMed** | **393,618** | **11,331,321** | **1,067,083** | **57,739** |
+  | **PubMedDS** | **13,197,430** | **127,670,590**  |  **57,943,354** | **44,881** |
+
+Please note that PubMedDS is created using distant supervision and has an average precision of 84%. 
 
 <h2 align="center">
   Citation
 </h2>
+
 
 Please consider citing our paper if you use this code in your work.
 
