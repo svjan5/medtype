@@ -32,7 +32,7 @@ setup(
         'spacy==2.2.3',
         'nltk==3.4.5',
         'numpy==1.16.4',
-        'Flask_Cors==3.0.8',
+        'Flask_Cors==3.0.9',
         'transformers==2.5.1',
         'termcolor==1.1.0',
         'flasgger==0.9.4',
