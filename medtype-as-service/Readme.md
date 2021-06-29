@@ -100,7 +100,7 @@
       ln -s $CTAKES_HOME/desc desc
       ```
 
-   3. Change to your CTakes version in pom.xml to `4.0.0`. After that run `mvn_package`.
+   3. Change to your CTakes version in pom.xml to `4.0.0`. After that run `mvn_package`. Please note that Java version should be 1.8.
 
    4. Change DictionaryLookupAnnotatorDB to the following `(In file : dec/ctakes-clinical-pipeline/desc/analysis_engine/AggregatePlaintextUMLSProcessor.xml)`
 
