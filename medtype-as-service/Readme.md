@@ -87,7 +87,7 @@
       
       rsync -av resources/ apache-ctakes-4.0.0/resources/
       
-      export CTAKES_HOME=<full_path_here>/apache-ctakes-4.0.0
+      export CTAKES_HOME=$PWD/apache-ctakes-4.0.0
       ```
 
    2. Now install ctakes-server repository and setup `resources` and `desc` directories:
