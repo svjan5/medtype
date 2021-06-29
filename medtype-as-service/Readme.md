@@ -121,7 +121,7 @@
       	 desc/ctakes-clinical-pipeline/desc/analysis_engine/AggregatePlaintextUMLSProcessor.xml
       ```
 
-      `localhost` and `9999` are ip and port of the ctakes-server. 
+      `localhost` and `9999` are ip and port of the ctakes-server. New authentication instructions for ctakes: [link](https://issues.apache.org/jira/secure/attachment/13015458/Readme_for_UMLS_auth.txt).
 
    6. To check whether everything is proper installed query : 
 
