@@ -45,8 +45,8 @@
 
       ```shell
       # For MeteMap
-      cd public_mm/bin; 
-      ./install.sh
+      cd public_mm; 
+      ./bin/install.sh
       ./bin/skrmedpostctl start
       ./bin/wsdserverctl start
       
