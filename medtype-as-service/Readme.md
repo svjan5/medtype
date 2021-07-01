@@ -61,7 +61,11 @@
 
       ```shell
       git clone https://github.com/AnthonyMRios/pymetamap
-      cd pymetamap; 
+      cd pymetamap;
+      ```
+      Remove this [line](https://github.com/AnthonyMRios/pymetamap/blob/master/pymetamap/SubprocessBackendLite.py#L90) before installing.
+      
+      ```shell
       python setup.py install
       
       python
