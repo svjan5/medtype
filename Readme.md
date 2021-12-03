@@ -68,11 +68,11 @@ We make the following resources available in this repository:
 </h2>
 
 We present two new, automatically-created datasets (available on Google Drive):
-* **[WikiMed](https://drive.google.com/open?id=16suJCinjfYhw1u1S-gPFmGFQZD331u7I)**: Over 1 million mentions of biomedical concepts in Wikipedia pages
+* **[WikiMed](https://doi.org/10.5281/zenodo.5755155)**: Over 1 million mentions of biomedical concepts in Wikipedia pages
   * Mentions were automatically identified based on links to Wikipedia pages for medical concepts.
   * Mentions of concepts _not_ linked to Wikipedia pages are not included in the dataset.
   * Manual evaluation of 100 random samples found 91% accuracy in the automatic annotations at the level of UMLS concepts, and 95% accuracy in terms of semantic type.
-* **[PubMedDS](https://drive.google.com/file/d/16mEFpCHhFGuQ7zYRAp2PP3XbAFq9MwoM/view?usp=sharing)**: Over 57 million mentions of biomedical concepts in abstracts of biomedical research papers on PubMed.
+* **[PubMedDS](https://doi.org/10.5281/zenodo.5755155)**: Over 57 million mentions of biomedical concepts in abstracts of biomedical research papers on PubMed.
   * Mentions were automatically identified using distant supervision, based on and a machine learning NER model in [scispaCy](https://allenai.github.io/scispacy/).
   * Concept identification focused on MeSH headers assigned to the papers.
   * Comparison with manually-annotated datasets found 75-90% precision in the automatic annotations.
@@ -149,4 +149,4 @@ For any clarification, comments, or suggestions please create an issue or contac
 
 ### Acknowledgements:
 
-This work was funded in part by NSF grant IIS **1917668** and funding from Dow Chemical and UPMC/Abridge.
+This work was funded in part by NSF grants IIS **1917668** IIS **1822831**, Dow Chemical and UPMC Enterprises/Abridge, and the National Library of Medicine of the National Institutes of Health under award number T15 LM007059.
