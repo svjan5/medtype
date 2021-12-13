@@ -2,9 +2,17 @@
 
 FROM python:3.9
 
-# We need Pipenv to set up Python packages.
-RUN pip install pipenv
-RUN pipenv install
+# Copy the source code to /opt/medtype
+WORKDIR /opt/medtype
+COPY . /opt/medtype
 
-# Set up medtype-as-service
-RUN medtype-as-service/setup.sh
+# Install gcc
+RUN apt install gcc
+
+# We need Pipenv to set up Python packages.
+RUN pip install --upgrade pip
+RUN pip install pipenv
+
+WORKDIR medtype-as-service/server
+# RUN pip install -r requirements.txt
+RUN python setup.py install
