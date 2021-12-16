@@ -1,5 +1,6 @@
 # A Dockerfile for running the MedType server.
 
+# Use anaconda for prerequisites.
 FROM conda/miniconda3
 
 # Update conda
@@ -18,9 +19,6 @@ RUN pip install --upgrade pip
 # Copy the source code to /opt/medtype
 WORKDIR /opt/medtype
 COPY . /opt/medtype
-
-# Get working on medtype-as-service
-WORKDIR medtype-as-service
 
 # There is a "./resources" directory that contains downloaded resources
 # such as models. To avoid redownloading them every time we run setup.py,
