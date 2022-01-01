@@ -1,11 +1,14 @@
-torch~=1.4.0
+#torch~=1.4.0
+torch
 bert_serving~=0.0.1
 Flask~=1.1.1
-scispacy~=0.2.4
+#scispacy~=0.2.4
+scispacy
 Flask_Compress~=1.5.0
 requests~=2.22.0
 Flask_JSON~=0.3.4
-spacy~=2.2.3
+#spacy~=2.2.3
+spacy
 nltk~=3.4.5
 numpy~=1.16.4
 Flask_Cors~=3.0.8

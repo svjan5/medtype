@@ -1,9 +1,9 @@
 DEFAULT='\033[0m'
 BOLD='\033[1;32m\e[1m'
 
-if ! python -c "import gdown" &> /dev/null; then
+if ! python3 -c "import gdown" &> /dev/null; then
 	echo -e "${BOLD} MedType> Install gdown package ${DEFAULT}"
-	pip install gdown
+	pip3 install gdown
 fi
 
 if [ ! -d "./resources/pretrained_models" ]
