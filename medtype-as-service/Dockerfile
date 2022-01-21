@@ -1,7 +1,8 @@
 # A Dockerfile for running the MedType server.
 #
 # Changelog:
-# - dev: Initial release.
+# - dev: None as yet
+# - 1.0 (2022-01-21): Initial release.
 
 # Use anaconda for prerequisites.
 FROM conda/miniconda3
