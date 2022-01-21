@@ -1,7 +1,7 @@
 # A Dockerfile for running the MedType server.
 #
 # Changelog:
-# - latest: Initial release.
+# - dev: Initial release.
 
 # Use anaconda for prerequisites.
 FROM conda/miniconda3
@@ -65,7 +65,13 @@ WORKDIR /opt/medtype-as-service
 COPY . /opt/medtype-as-service
 
 # Install MedType Server requirements
+# We do this through Conda earlier in this file.
 # RUN pip install -r server/requirements.txt
+
+# Create and activate a Python environment to install packages to.
+ENV VIRTUAL_ENV=/opt/medtype/env-medtype
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Setup MedType as service
 RUN bash setup.sh
